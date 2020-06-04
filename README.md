@@ -2,5 +2,5 @@
 [![Build Status](https://travis-ci.com/travis-ci/travis-web.svg?branch=master)](https://travis-ci.com/travis-ci/travis-web)
 
 # python-project-lvl2
-### This package consists of a few simple puzzle games, stretch your brain and remember math.
+### Returns result from compares two files, and output the result to specified format file
 ### [Latest version download here](https://test.pypi.org/project/demetriusstorm-gendiff/)
