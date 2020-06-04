@@ -1,6 +1,7 @@
 """
-The package compares two files,
-and outputs the result in the specified format.
+The package compares two files.
+
+Outputs the result in the specified format.
 """
 
 import argparse
@@ -8,13 +9,15 @@ import argparse
 
 def generate_diff(first_file='', second_file='', format_file='json'):
     """
-    receive two position arguments (/path/to/file1, /path/to/file2)
-    and out file format (-f [json []])
+    Given compares two files result in the specified format.
 
-    :param first_file:
-    :param second_file:
-    :param format_file:
-    :return: string result difference files
+    Parameters:
+        first_file: first file /path/to/file1
+        second_file: second file /path/to/file2
+        format_file: format file output -f [json []]
+
+    Returns:
+        return string result difference files.
     """
     parser = argparse.ArgumentParser(description='Generate diff')
     parser.add_argument('first_file')
