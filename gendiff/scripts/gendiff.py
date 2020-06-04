@@ -1,5 +1,5 @@
 """
-The package compares two files
+The package compares two files,
 and outputs the result in the specified format.
 """
 
@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 def main(name='Dima'):
     """Welcome function."""
-    print(f'Welcome to Gendiff, {name}!')
+    print('Welcome to Gendiff, {name}!'.format(name))
 
 
 if __name__ == '__main__':
