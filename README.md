@@ -5,6 +5,6 @@
 <h2>python-project-lvl2</h2>
 
 <h3>Returns result from compares two files, and output it to specified format file</h3>
-### [Latest version download here](https://test.pypi.org/project/demetriusstorm-gendiff/)
+<code>python3 -m pip install --no-cache-dir --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ demetriusstorm-gendiff</code>
 
 [![asciicast](https://asciinema.org/a/V9pgfA4Ffl1GT89jtgeTPiSr5.svg)](https://asciinema.org/a/V9pgfA4Ffl1GT89jtgeTPiSr5)
