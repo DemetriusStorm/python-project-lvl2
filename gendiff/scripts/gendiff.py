@@ -4,14 +4,28 @@ The package compares two files.
 Outputs the result in the specified format.
 """
 
-
 import argparse
 import json
 import os
 from collections import defaultdict
 
+EXTENSIONS = ('json', 'yaml', 'plane')
 
-def file_type_check(path_to_file):
+
+def is_file(path_to_file: str) -> bool:
+    """
+    Check file in path.
+
+    Parameters:
+        path_to_file: path to file
+
+    Returns:
+        return bool
+    """
+    return os.path.isfile(path_to_file)
+
+
+def check_extension(path_to_file: str) -> str:
     """
     Check file extension.
 
@@ -19,17 +33,31 @@ def file_type_check(path_to_file):
         path_to_file: path to file
 
     Returns:
-        return string ext
+        return string
     """
-    if os.path.isfile(path_to_file):
-        filename = os.path.split(path_to_file)[1]
-        extension = filename.split('.')[1]
+    # TODO: will fix WPS421 before production
+    # Check extension
+    try:
+        is_file(path_to_file)
+    except FileExistsError as file_exist_error:
+        print('File not found: {0}'.format(file_exist_error))  # noqa: WPS421
+
+    # TODO: Check extension file - why? May be check data structure?
+    filename = os.path.split(path_to_file)[1]
+    if len(filename) < 2:
+        print('File {0} without extension'.format(  # noqa: WPS421
+            filename,
+        ))
     else:
-        return 'File not found'
-    return extension
+        ext = filename.split('.')[1]
+        if ext not in EXTENSIONS:
+            print('Error, file must be one of {0}'.format(  # noqa: WPS421
+                EXTENSIONS,
+            ))
+        return ext
 
 
-def data_reception(path_to_file):
+def data_reception(path_to_file: str) -> dict:
     """
     Load data from source.
 
@@ -39,17 +67,19 @@ def data_reception(path_to_file):
     Returns:
         return dictionary
     """
-    extensions = ['json', 'yaml', 'plane']
-    ext = file_type_check(path_to_file)
+    # TODO: will fix WPS421 before production
+    try:
+        with open(path_to_file, 'r') as json_read:
+            json_data = json_read.read()
+            data_out = json.loads(json_data)
+    except TypeError:
+        print('File {0} is not json'.format(  # noqa: WPS421
+            path_to_file,
+        ))
+    return data_out
 
-    if ext not in extensions:
-        return 'Error, file must be one from {0}'.format(extensions)
 
-    with open(path_to_file, 'r') as datafile:
-        return json.loads(datafile.read())
-
-
-def convert_to_string(dictionary):
+def convert_to_string(dictionary: dict) -> str:
     """
     Convert dict to manual string.
 
@@ -109,13 +139,13 @@ def generate_diff(first_file, second_file):
 
 def main():
     """Generate main function."""
+    # TODO: will fix WPS421 before production
     parser = argparse.ArgumentParser(description='Generate diff')
     parser.add_argument('first_file')
     parser.add_argument('second_file')
     parser.add_argument('-f', '--format', help='set format of output')
     args = parser.parse_args()
     result_diff = generate_diff(args.first_file, args.second_file)
-    # TODO: will fix this later
     print('{0}'.format(result_diff))  # noqa: WPS421
 
 
