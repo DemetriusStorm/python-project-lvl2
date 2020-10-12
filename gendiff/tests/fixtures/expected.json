@@ -1,1 +1,0 @@
-{'verbose': True, 'host': 'hexlet.io', 'smtp': 25, 'starttls': True, 'timeout': 20}
