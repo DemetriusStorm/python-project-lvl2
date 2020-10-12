@@ -1,0 +1,7 @@
+Property 'common.setting2' removed
+Property 'common.setting6' removed
+Property 'common.setting4' added with value: 'blah blah'
+Property 'common.setting5' added with value: 'complex value'
+Property 'group1.baz' changed, from 'bas' to 'bars'
+Property 'group2' removed
+Property 'group3' added with value: 'complex value'
