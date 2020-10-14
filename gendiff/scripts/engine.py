@@ -1,51 +1,36 @@
-"""Test, test."""
+"""Engine."""
 
 import argparse
-from gendiff import gendiff, parsers, formats
+
+from gendiff import gendiff, parsers, formats  # noqa: I001
 
 parser = argparse.ArgumentParser(description='Generate diff')
-parser.add_argument('first_file',
-                    type=str,
-                    help='select first file to compare')
-parser.add_argument('second_file',
-                    type=str,
-                    help='select second file to compare')
-parser.add_argument('-f', '--format',
-                    type=str,
-                    help='set format of output')
+parser.add_argument(
+    'first_file',
+    type=str,
+    help='select first file to compare',
+)
+parser.add_argument(
+    'second_file',
+    type=str,
+    help='select second file to compare',
+)
+parser.add_argument('-f', '--format', type=str, help='set format of output')
 
 
-def catch_exceptions(func_object):
-    """
-    Decorator try catch exceptions.
-
-    Parameters:
-        func_object: any function
-
-    Returns: result or except
-    """
-    def try_to_run():
-        try:
-            func_object()
-        except Exception as e:
-            print('Error:', str(e))
-
-    return try_to_run
-
-
-@catch_exceptions
 def main():
-    """Main function."""
+    """
+    Generate result diff function.
 
-    # TODO: fix WPS421 before production?
+    Raises:
+        Exception: extension not in supported ext
+    """
     args = parser.parse_args()
-    # TODO: !!!!DONE!!!! fix 'format_diff = None'
-    # format_diff = None
     if args.format == formats.JSON:
         format_diff = formats.json
     elif args.format == formats.PLAIN:
         format_diff = formats.plain
-    elif not args.format:
+    elif args.format is None:
         format_diff = formats.simple
     else:
         raise Exception('Format is not supported.')
@@ -58,5 +43,5 @@ def main():
     print(format_diff(diff))  # noqa: WPS421
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
