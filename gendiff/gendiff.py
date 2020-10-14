@@ -1,59 +1,50 @@
-"""Gedniff."""
+"""Gendiff."""
 
-KEYS_STATE = (
-    UNCHANGED,
-    REPLACED,
-    ADDED,
-    DELETED,
-    NESTED,
-) = (
-    'unchanged',
-    'replaced',
-    'added',
-    'deleted',
-    'nested',
-)
+UNCHANGED, REPLACED, ADDED = 'unchanged', 'replaced', 'added'
+DELETED, NESTED = 'deleted', 'nested'
 
 
-def gen_tree(data):
+def gen_tree(nodes):
     """
     Build tree.
 
     Parameters:
-        data: data
+        nodes: nodes
 
-    Returns: tree
+    Returns:
+        return result tree
     """
-    result = {}
-    for key in data:
-        if isinstance(data[key], dict):
-            result[key] = (NESTED, gen_tree(data[key]))
+    tree = {}
+    for key, _ in nodes.items():
+        if isinstance(nodes[key], dict):
+            tree[key] = (NESTED, gen_tree(nodes[key]))
         else:
-            result[key] = (UNCHANGED, data[key])
+            tree[key] = (UNCHANGED, nodes[key])
 
-    return result
+    return tree
 
 
-def gen_state(state, value):
+def gen_state(state, node):
     """
-    Check isinstance
+    Check isinstance.
+
     Parameters:
         state: state data
-        value: data
+        node: node
 
-    Returns: result (state, data) of data
+    Returns:
+        return result (state, data) of data
     """
     # TODO: fix 'result = None'
-    # result = None
-    if isinstance(value, dict):
-        result = state, gen_tree(value)
+    if isinstance(node, dict):
+        tree = state, gen_tree(node)
     else:
-        result = state, value
+        tree = state, node
 
-    return result
+    return tree
 
 
-def gen_diff(main_data, changed_data):
+def gen_diff(main_data, changed_data):  # noqa: WPS210
     """
     Build diff.
 
@@ -61,43 +52,36 @@ def gen_diff(main_data, changed_data):
         main_data: main_data
         changed_data: changed_data
 
-    Returns: diff
+    Returns:
+        return diff
     """
-
     diff = {}
     keys_state = {
         UNCHANGED: main_data.keys() & changed_data.keys(),
         DELETED: main_data.keys() - changed_data.keys(),
-        ADDED: changed_data.keys() - main_data.keys()
+        ADDED: changed_data.keys() - main_data.keys(),
     }
 
-    for key, value in main_data.items():
+    for key, node in main_data.items():
         if key in keys_state[UNCHANGED]:
-            common_key = changed_data[key]
-            if isinstance(value, dict) and isinstance(
-                    common_key,
-                    dict):
-                diff[key] = (NESTED, gen_diff(
-                    value,
-                    common_key))
-            elif value == common_key:
-                diff[key] = (UNCHANGED, value)
+            shared = changed_data[key]
+            if isinstance(node, dict) and isinstance(shared, dict):
+                diff[key] = (NESTED, gen_diff(node, shared))
+            elif node == shared:
+                diff[key] = (UNCHANGED, node)
             else:
-                # TODO: fix change to func?
-                if isinstance(common_key, dict) and not isinstance(value,
-                                                                   dict):
-                    diff[key] = REPLACED, gen_tree(common_key), value
-                elif not isinstance(common_key, dict) and isinstance(value,
-                                                                     dict):
-                    diff[key] = REPLACED, common_key, gen_tree(value)
+                if isinstance(shared, dict) and not isinstance(node, dict):
+                    diff[key] = REPLACED, gen_tree(shared), node
+                elif not isinstance(shared, dict) and isinstance(node, dict):
+                    diff[key] = REPLACED, shared, gen_tree(node)
                 else:
-                    diff[key] = REPLACED, common_key, value
+                    diff[key] = REPLACED, shared, node
 
         elif key in keys_state[DELETED]:
-            diff[key] = gen_state(DELETED, value)
+            diff[key] = gen_state(DELETED, node)
 
-    for key, value in changed_data.items():
-        if key in keys_state[ADDED]:
-            diff[key] = gen_state(ADDED, value)
+    for key_after, value_after in changed_data.items():
+        if key_after in keys_state[ADDED]:
+            diff[key_after] = gen_state(ADDED, value_after)
 
     return diff
