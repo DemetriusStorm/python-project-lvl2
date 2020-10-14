@@ -7,7 +7,6 @@ PATH = './tests/fixtures/data'
 
 def test_parse_data():
     """Test parse data."""
-
     test_cases = [
         (PATH + '/second_file.json', '.json'),
         (PATH + '/second_file.yaml', '.yaml'),
