@@ -1,1 +1,1 @@
-"""Namespace"""
+"""Namespace."""
