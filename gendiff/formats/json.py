@@ -1,15 +1,16 @@
-"""Json formatter"""
+"""Formatter json."""
 
 import json
 
 
 def render_json(diff):
     """
-    Dumping data to json
+    Dump data to json.
 
     Parameters:
         diff: diff
 
-    Returns: dump diff
+    Returns:
+        return dump diff
     """
     return json.dumps(diff)

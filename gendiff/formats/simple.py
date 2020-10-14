@@ -1,85 +1,110 @@
-"""Test, test."""
+"""Formatter simple text."""
 
-from gendiff.gendiff import UNCHANGED, DELETED, ADDED, REPLACED, NESTED
+from gendiff.gendiff import UNCHANGED, DELETED, ADDED  # noqa: I001
+from gendiff.gendiff import REPLACED, NESTED  # noqa: I001
 
-RENDER_SIGNS = {
+render_sign = {
     UNCHANGED: None,
     ADDED: '+',
     DELETED: '-',
-    NESTED: None
+    NESTED: None,
 }
 
 
-def make_result(key, value, spaces, sign=None):
+def _bool(node_value, mutt):
+    return isinstance(node_value, mutt)
+
+
+def make_result(key, node_value, space, sign=None):
     """
     Make result.
 
     Parameters:
         key: key
-        value: value
-        spaces: spaces
+        node_value: value
+        space: spaces
         sign: sign
 
-    Returns: result line
+    Returns:
+        return result line
     """
-    string_spaces = '' + (' ' * spaces)
+    string_space = '{0}{1}'.format('', (' ' * space))
     if not sign:
         sign = ' '
 
-    if value is True:
-        value = 'true'
+    if node_value is True:
+        node_value = 'true'
 
-    result = '{string_spaces}{sign} {key}: {value}\n'.format(
-        string_spaces=string_spaces,
-        sign=sign,
-        key=key,
-        value=value,
+    return '{0}{1} {2}: {3}\n'.format(
+        string_space,
+        sign,
+        key,
+        node_value,
     )
-    return result
 
 
-def render_diff(diff, spaces=2):
+def render_diff(diff, space=2):  # noqa: WPS231
     """
     Convert to text format.
 
     Parameters:
         diff: diff
-        spaces: spaces
+        space: spaces
 
-    Returns: rendered result.
+    Returns:
+        return rendered result.
     """
-    result = '{' + '\n'
+    plus = '+'
+    minus = '-'
+    tree = '{0}{1}'.format('{', '\n')
 
-    for key, value in diff.items():
-        if value[0] == NESTED:
-            result += make_result(key,
-                                  render_diff(value[1], spaces=spaces + 4),
-                                  spaces)
+    for key, node in diff.items():
+        if node[0] == NESTED:
+            tree += make_result(
+                key,
+                render_diff(node[1], space=space + 4),
+                space,
+            )
 
-        elif isinstance(value[1], dict) and not value[0] == REPLACED:
-            result += make_result(key,
-                                  render_diff(value[1], spaces=spaces + 4),
-                                  spaces, sign=RENDER_SIGNS[value[0]])
+        elif _bool(node[1], dict) and node[0] != REPLACED:
+            tree += make_result(
+                key,
+                render_diff(node[1], space=space + 4),
+                space,
+                sign=render_sign[node[0]],
+            )
 
-        elif value[0] == REPLACED:
-            if isinstance(value[1], dict) and not isinstance(value[2], dict):
-                result += make_result(key,
-                                      render_diff(value[1], spaces=spaces + 4),
-                                      spaces=spaces, sign='+')
-                result += make_result(key, value[2], spaces=spaces, sign='-')
-            elif not isinstance(value[1], dict) and isinstance(value[2], dict):
-                result += make_result(key, value[1], spaces=spaces, sign='+')
-                result += make_result(key,
-                                      render_diff(value[2], spaces=spaces + 4),
-                                      spaces=spaces, sign='-')
+        elif node[0] == REPLACED:
+            if _bool(node[1], dict) and not _bool(node[2], dict):
+                tree += make_result(
+                    key,
+                    render_diff(node[1], space=space + 4),
+                    space=space,
+                    sign=plus,
+                )
+                tree += make_result(key, node[2], space=space, sign=minus)
+
+            elif not _bool(node[1], dict) and _bool(node[2], dict):
+                tree += make_result(key, node[1], space=space, sign=plus)
+                tree += make_result(
+                    key,
+                    render_diff(node[2], space=space + 4),
+                    space=space,
+                    sign=minus,
+                )
+
             else:
-                result += make_result(key, value[1], spaces=spaces, sign='+')
-                result += make_result(key, value[2], spaces=spaces, sign='-')
+                tree += make_result(key, node[1], space=space, sign=plus)
+                tree += make_result(key, node[2], space=space, sign=minus)
 
         else:
-            result += make_result(key, value[1], spaces=spaces,
-                                  sign=RENDER_SIGNS[value[0]])
+            tree += make_result(
+                key,
+                node[1],
+                space=space,
+                sign=render_sign[node[0]],
+            )
 
-    result += ' ' * (spaces - 2) + '}'
+    tree += '{0}{1}'.format(' ' * (space - 2), '}')
 
-    return result
+    return tree

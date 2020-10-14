@@ -1,43 +1,48 @@
-"""Plain formatter."""
+"""Formatter plain."""
+from gendiff.gendiff import DELETED, ADDED, REPLACED, NESTED  # noqa: I001
 
-from gendiff.gendiff import DELETED, ADDED, REPLACED, NESTED
 
-
-def make_result(key, value, state, replaced_value=None):
+def make_result(key, node_value, state, replaced_value=None):
     """
-    Making result.
+    Make text diff result.
 
     Parameters:
         key: key
-        value: value
-        state: state
-        replaced_value:
+        node_value: value
+        state: state diff
+        replaced_value: replaced_value
+
+    Returns:
+        return result diff
     """
+    result_diff = ''
 
-    result = ''
-    if value is True:
-        value = 'true'
+    if node_value is True:
+        node_value = 'true'
 
-    elif isinstance(value, dict):
-        value = 'complex value'
+    elif isinstance(node_value, dict):
+        node_value = 'complex value'
 
     if state == DELETED:
-        result = 'Property \'{key}\' removed'.format(key=key)
+        result_diff = "Property '{0}' removed".format(key)
 
     elif state == ADDED:
-        result = 'Property \'{key}\' added with value: \'{value}\''.format(
-            key=key, value=value
+        result_diff = "Property '{0}' added with value: '{1}'".format(
+            key,
+            node_value,
         )
 
     elif state == REPLACED:
         if isinstance(replaced_value, dict):
             replaced_value = 'complex value'
-        result = 'Property \'{key}\' changed, from \'{old_value}\' ' \
-                 'to \'{new_value}\''.format(key=key,
-                                             old_value=replaced_value,
-                                             new_value=value)
 
-    return result + '\n'
+        result_diff = "Property '{0}' changed, from '{1}' to '{2}'".format(
+            key,
+            replaced_value,
+            node_value,
+        )
+
+    return '{0}{1}'.format(result_diff, '\n')
 
 
 def render_diff(diff, root_key=None):
@@ -48,33 +53,33 @@ def render_diff(diff, root_key=None):
         diff: diff
         root_key: root_key
 
-    Returns: rendered diff.
+    Returns:
+        return rendered diff.
     """
-    result = ''
+    result_render = ''
 
-    for key, value in diff.items():
-        tree_items = '{root}.{key}'.format(root=root_key, key=key) \
-            if root_key else key
+    for key, node_value in diff.items():
+        tree_items = '{0}.{1}'.format(root_key, key) if root_key else key
 
-        if value[0] == NESTED:
-            result += render_diff(
-                value[1],
-                tree_items
-            ) + '\n'
+        if node_value[0] == NESTED:
+            result_render += '{0}{1}'.format(
+                render_diff(node_value[1], tree_items),
+                '\n',
+            )
 
-        elif value[0] == REPLACED:
-            result += make_result(
+        elif node_value[0] == REPLACED:
+            result_render += make_result(
                 tree_items,
-                value[1],
+                node_value[1],
                 REPLACED,
-                value[2],
+                node_value[2],
             )
 
-        elif value[0] in (ADDED, DELETED):
-            result += make_result(
+        elif node_value[0] in ADDED or node_value[0] in DELETED:
+            result_render += make_result(
                 tree_items,
-                value[1],
-                value[0],
+                node_value[1],
+                node_value[0],
             )
 
-    return result.rstrip('\n')
+    return result_render.rstrip('\n')
