@@ -1,16 +1,6 @@
-"""Imported formats."""
+"""Formats."""
+from gendiff.formats.json import render_json as json  # noqa: F401
+from gendiff.formats.simple import render_diff as simple  # noqa: F401
+from gendiff.formats.plain import render_diff as plain  # noqa: F401, I001
 
-# TODO: fix # noqa F401
-from gendiff.formats.json import render_json as json
-from gendiff.formats.simple import render_diff as simple
-from gendiff.formats.plain import render_diff as plain
-
-FORMATS = (
-    JSON,
-    SIMPLE,
-    PLAIN,
-) = (
-    'json',
-    'simple',
-    'plain',
-)
+JSON, SIMPLE, PLAIN = 'json', 'simple', 'plain'
