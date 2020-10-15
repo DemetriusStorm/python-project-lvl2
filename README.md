@@ -2,6 +2,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/67902e4998249efb97a2/maintainability)](https://codeclimate.com/github/DemetriusStorm/python-project-lvl2/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/67902e4998249efb97a2/test_coverage)](https://codeclimate.com/github/DemetriusStorm/python-project-lvl2/test_coverage)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+![Python CI](https://github.com/DemetriusStorm/python-project-lvl2/workflows/Python%20CI/badge.svg)
 
 #### python-project-lvl2
 Returns result from compares two files, and output it to specified format type.
