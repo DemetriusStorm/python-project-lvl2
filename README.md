@@ -7,7 +7,7 @@
 Returns result from compares two files, and output it to specified format type.
 
 > Usage: <code> gendiff [-h] [-f [--format] FORMAT] first_file second_file</code><br> 
->Format comparing files supports are: <code>'.json'</code>, <code>'*.yaml'</code><br>
+>Format comparing files supports are: <code>'.json'</code>, <code>'.yaml'</code><br>
 >To compare files with json result: <code>gendiff -f json path_to/file1 path_to/file2</code><br>
 >To compare files with simple text result: <code>gendiff -f plain path_to/file1 path_to/file2</code><br>
 >>More about [json](https://en.wikipedia.org/wiki/JSON), [yaml](https://en.wikipedia.org/wiki/YAML)
