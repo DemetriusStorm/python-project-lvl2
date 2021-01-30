@@ -4,19 +4,6 @@ import argparse
 
 from gendiff import gendiff, parsers, formats  # noqa: I001
 
-parser = argparse.ArgumentParser(description='Generate diff')
-parser.add_argument(
-    'first_file',
-    type=str,
-    help='select first file to compare',
-)
-parser.add_argument(
-    'second_file',
-    type=str,
-    help='select second file to compare',
-)
-parser.add_argument('-f', '--format', type=str, help='set format of output')
-
 
 def main():
     """
@@ -25,6 +12,23 @@ def main():
     Raises:
         Exception: extension not in supported ext
     """
+    parser = argparse.ArgumentParser(description='Generate diff')
+    parser.add_argument(
+        'first_file',
+        type=str,
+        help='select first file to compare',
+    )
+    parser.add_argument(
+        'second_file',
+        type=str,
+        help='select second file to compare',
+    )
+    parser.add_argument(
+        '-f',
+        '--format',
+        type=str,
+        help='set format of output',
+    )
     args = parser.parse_args()
     if args.format == formats.JSON:
         format_diff = formats.json

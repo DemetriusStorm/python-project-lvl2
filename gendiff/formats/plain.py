@@ -19,7 +19,8 @@ def make_result(key, node_value, state, replaced_value=None):
 
     if node_value is True:
         node_value = 'true'
-
+    elif node_value is False:
+        node_value = 'false'
     elif isinstance(node_value, dict):
         node_value = 'complex value'
 
@@ -42,7 +43,7 @@ def make_result(key, node_value, state, replaced_value=None):
             node_value,
         )
 
-    return '{0}{1}'.format(result_diff, '\n')
+    return '{0}'.format(result_diff)
 
 
 def render_diff(diff, root_key=None):
@@ -56,30 +57,31 @@ def render_diff(diff, root_key=None):
     Returns:
         return rendered diff.
     """
-    result_render = ''
+    result_render = []
 
     for key, node_value in diff.items():
+        status = node_value[0]
+        is_complex = node_value[1]
         tree_items = '{0}.{1}'.format(root_key, key) if root_key else key
 
-        if node_value[0] == NESTED:
-            result_render += '{0}{1}'.format(
-                render_diff(node_value[1], tree_items),
-                '\n',
-            )
+        if status == NESTED:
+            result_render.append(render_diff(is_complex, tree_items))
 
-        elif node_value[0] == REPLACED:
-            result_render += make_result(
+        elif status == REPLACED:
+            difference = (node_value[1], node_value[2])
+            (new_value, old_value) = difference
+            result_render.append(make_result(
                 tree_items,
-                node_value[1],
+                new_value,
                 REPLACED,
-                node_value[2],
-            )
+                old_value,
+            ))
 
-        elif node_value[0] in ADDED or node_value[0] in DELETED:
-            result_render += make_result(
+        elif status in ADDED or status in DELETED:
+            result_render.append(make_result(
                 tree_items,
-                node_value[1],
-                node_value[0],
-            )
-
-    return result_render.rstrip('\n')
+                is_complex,
+                status,
+            ))
+    print(result_render)  # noqa: WPS421
+    return '\n'.join(result_render)

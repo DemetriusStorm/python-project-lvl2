@@ -1,7 +1,12 @@
 """Formatter simple text."""
 
-from gendiff.gendiff import UNCHANGED, DELETED, ADDED  # noqa: I001
-from gendiff.gendiff import REPLACED, NESTED  # noqa: I001
+from gendiff.gendiff import (  # noqa: I001
+    UNCHANGED,  # noqa: I001
+    DELETED,  # noqa: I001
+    ADDED,  # noqa: I001
+    REPLACED,  # noqa: I001
+    NESTED,  # noqa: I001
+)  # noqa: I001
 
 render_sign = {
     UNCHANGED: None,
@@ -35,7 +40,7 @@ def make_result(key, node_value, space, sign=None):
     if node_value is True:
         node_value = 'true'
 
-    return '{0}{1} {2}: {3}\n'.format(
+    return '{0}{1} {2}: {3}'.format(
         string_space,
         sign,
         key,
@@ -43,7 +48,7 @@ def make_result(key, node_value, space, sign=None):
     )
 
 
-def render_diff(diff, space=2):  # noqa: WPS231
+def render_diff(diff, space=2):  # noqa: WPS231 WPS213
     """
     Convert to text format.
 
@@ -54,57 +59,76 @@ def render_diff(diff, space=2):  # noqa: WPS231
     Returns:
         return rendered result.
     """
-    plus = '+'
-    minus = '-'
-    tree = '{0}{1}'.format('{', '\n')
-
+    tree = ['{']
     for key, node in diff.items():
-        if node[0] == NESTED:
-            tree += make_result(
+        status, is_complex = node[0], node[1]
+        if status == NESTED:
+            tree.append(make_result(
                 key,
-                render_diff(node[1], space=space + 4),
+                render_diff(is_complex, space=space + 4),
                 space,
-            )
+            ))
 
-        elif _bool(node[1], dict) and node[0] != REPLACED:
-            tree += make_result(
+        elif _bool(is_complex, dict) and status != REPLACED:
+            tree.append(make_result(
                 key,
-                render_diff(node[1], space=space + 4),
+                render_diff(is_complex, space=space + 4),
                 space,
-                sign=render_sign[node[0]],
-            )
+                sign=render_sign[status],
+            ))
 
-        elif node[0] == REPLACED:
-            if _bool(node[1], dict) and not _bool(node[2], dict):
-                tree += make_result(
+        elif status == REPLACED:
+            difference = (node[1], node[2])
+            (new_value, old_value) = difference
+            if _bool(new_value, dict) and not _bool(old_value, dict):
+                tree.append(make_result(
                     key,
-                    render_diff(node[1], space=space + 4),
+                    render_diff(new_value, space=space + 4),
                     space=space,
-                    sign=plus,
-                )
-                tree += make_result(key, node[2], space=space, sign=minus)
+                    sign=render_sign[ADDED],
+                ))
+                tree.append(make_result(
+                    key,
+                    old_value,
+                    space=space,
+                    sign=render_sign[DELETED],
+                ))
 
-            elif not _bool(node[1], dict) and _bool(node[2], dict):
-                tree += make_result(key, node[1], space=space, sign=plus)
-                tree += make_result(
+            elif not _bool(new_value, dict) and _bool(old_value, dict):
+                tree.append(make_result(
                     key,
-                    render_diff(node[2], space=space + 4),
+                    new_value,
                     space=space,
-                    sign=minus,
-                )
+                    sign=render_sign[ADDED],
+                ))
+                tree.append(make_result(
+                    key,
+                    render_diff(old_value, space=space + 4),
+                    space=space,
+                    sign=render_sign[DELETED],
+                ))
 
             else:
-                tree += make_result(key, node[1], space=space, sign=plus)
-                tree += make_result(key, node[2], space=space, sign=minus)
+                tree.append(make_result(
+                    key,
+                    new_value,
+                    space=space,
+                    sign=render_sign[ADDED],
+                ))
+                tree.append(make_result(
+                    key,
+                    old_value,
+                    space=space,
+                    sign=render_sign[DELETED],
+                ))
 
         else:
-            tree += make_result(
+            tree.append(make_result(
                 key,
-                node[1],
+                is_complex,
                 space=space,
-                sign=render_sign[node[0]],
-            )
+                sign=render_sign[status],
+            ))
 
-    tree += '{0}{1}'.format(' ' * (space - 2), '}')
-
-    return tree
+    tree.append('}')
+    return '\n'.join(tree)
