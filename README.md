@@ -4,21 +4,21 @@
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 ![Python CI](https://github.com/DemetriusStorm/python-project-lvl2/workflows/Python%20CI/badge.svg)
 
-#### python-project-lvl2
+## python-project-lvl2
 Returns result from compares two files, and output it to specified format type.
 
-> Usage: <code> gendiff [-h] [-f [--format] FORMAT] first_file second_file</code><br> 
->Format comparing files supports are: <code>'.json'</code>, <code>'.yaml'</code><br>
->To compare files with json result: <code>gendiff -f json path_to/file1 path_to/file2</code><br>
->To compare files with simple text result: <code>gendiff -f plain path_to/file1 path_to/file2</code><br>
->>More about [json](https://en.wikipedia.org/wiki/JSON), [yaml](https://en.wikipedia.org/wiki/YAML)
+Usage: <code> gendiff [-h] [-f [--format] FORMAT] first_file second_file</code><br> 
+Format comparing files supports are: <code>'.json'</code>, <code>'.yaml'</code><br>
+To compare files with json result: <code>gendiff -f json path_to/file1 path_to/file2</code><br>
+To compare files with simple text result: <code>gendiff -f plain path_to/file1 path_to/file2</code><br>
+>More about [json](https://en.wikipedia.org/wiki/JSON), [yaml](https://en.wikipedia.org/wiki/YAML)
 
-#### How to Install and run package.<br>
+### How to Install and run package.<br>
 ><code>pip install --no-cache-dir --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ demetriusstorm-gendiff</code>
 
 [![asciicast](https://asciinema.org/a/365553.svg)](https://asciinema.org/a/365553)
 
-#### Usefull
+### Usefull
 Comparing JSON files
 [![asciicast](https://asciinema.org/a/365554.svg)](https://asciinema.org/a/365554)
 
