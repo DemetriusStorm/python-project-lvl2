@@ -16,11 +16,11 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pyyaml = "^5.3.1"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.14.0"
 pytest = "^5.4.3"
-pyyaml = "^5.3.1"
 pytest-cov = "^2.10.1"
 
 [tool.poetry.scripts]
