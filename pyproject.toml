@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "demetriusstorm-hexlet-code"
+name = "hexlet-code"
 version = "0.1.0"
 description = "Compare two files. Supports json, plain and simple text."
 authors = ["Dmitriy Bulygin <demetrius.storm@gmail.com>"]
