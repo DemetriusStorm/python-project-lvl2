@@ -1,31 +1,11 @@
 """Engine."""
 
-import argparse
-
-from gendiff import parsers, formats, gendiff
-
-parser = argparse.ArgumentParser(description='Generate diff')
-parser.add_argument(
-    'first_file',
-    type=str,
-    help='select first file to compare',
-)
-parser.add_argument(
-    'second_file',
-    type=str,
-    help='select second file to compare',
-)
-parser.add_argument(
-    '-f',
-    '--format',
-    type=str,
-    help='set format of output',
-)
+from gendiff import parsers, formats, gendiff, reader_ext_source
 
 
 def main():
     """Generate result diff function."""
-    args = parser.parse_args()
+    args = reader_ext_source.parser.parse_args()
     if args.format == formats.JSON:
         format_diff = formats.render_json
     elif args.format == formats.PLAIN:
