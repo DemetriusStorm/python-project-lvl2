@@ -3,9 +3,13 @@
 import argparse
 
 from gendiff import formats
-
-UNCHANGED, REPLACED, ADDED = 'unchanged', 'replaced', 'added'
-DELETED, NESTED = 'deleted', 'nested'
+from gendiff import (
+    UNCHANGED,
+    REPLACED,
+    ADDED,
+    DELETED,
+    NESTED,
+)
 
 parser = argparse.ArgumentParser(description='Generate diff')
 parser.add_argument(
