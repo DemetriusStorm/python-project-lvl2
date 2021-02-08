@@ -1,16 +1,14 @@
 """Engine."""
 
-from gendiff import gendiff, parsers
-from gendiff.gendiff import args, format_diff
+from gendiff import parsers
+from gendiff.gendiff import args, format_diff, generate_diff
 
 
 def main():
     """Generate result diff function."""
     first_file = parsers.get_data(args.first_file)
     second_file = parsers.get_data(args.second_file)
-
-    diff = gendiff.gen_diff(first_file, second_file)
-    print(format_diff(diff))
+    print(format_diff(generate_diff(first_file, second_file)))
 
 
 if __name__ == '__main__':

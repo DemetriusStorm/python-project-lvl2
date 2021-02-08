@@ -1,6 +1,7 @@
 """Test formats."""
 
-from gendiff import gendiff, parsers, formats
+from gendiff import parsers, formats
+from gendiff.gendiff import generate_diff
 
 PATH = './tests/fixtures'
 
@@ -19,7 +20,7 @@ def test_json():
             '{0}{1}'.format(PATH, '/data/after.json'),
         )
 
-        diff = gendiff.gen_diff(first_file, second_file)
+        diff = generate_diff(first_file, second_file)
         assert formats.json(diff) == expected
 
 
@@ -37,7 +38,7 @@ def test_plain():
             '{0}{1}'.format(PATH, '/data/after.json'),
         )
 
-        diff = gendiff.gen_diff(first_file, second_file)
+        diff = generate_diff(first_file, second_file)
         assert formats.plain(diff) == expected
 
 
@@ -55,7 +56,7 @@ def test_simple_plain():
             '{0}{1}'.format(PATH, '/data/second_file.yaml'),
         )
 
-        diff = gendiff.gen_diff(first_file, second_file)
+        diff = generate_diff(first_file, second_file)
         assert formats.simple(diff) == expected
 
         first_file = parsers.get_data(
@@ -65,7 +66,7 @@ def test_simple_plain():
             '{0}{1}'.format(PATH, '/data/second_file.json'),
         )
 
-        diff = gendiff.gen_diff(first_file, second_file)
+        diff = generate_diff(first_file, second_file)
         assert formats.simple(diff) == expected
 
 
@@ -83,5 +84,5 @@ def test_tree():
             '{0}{1}'.format(PATH, '/data/after.json'),
         )
 
-        diff = gendiff.gen_diff(first_file, second_file)
+        diff = generate_diff(first_file, second_file)
         assert formats.simple(diff) == expected

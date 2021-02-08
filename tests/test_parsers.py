@@ -1,5 +1,6 @@
 """Test data."""
 
+from gendiff import reader_ext_source as reader
 from gendiff import parsers
 
 PATH = './tests/fixtures/data'
@@ -12,11 +13,11 @@ def test_parse_data():
         ['{0}{1}'.format(PATH, '/second_file.yaml'), '.yaml'],
     ]
     assert isinstance(
-        parsers.result_parser(test_cases[0][1], test_cases[0][0]),
+        reader.result_parser(test_cases[0][1], test_cases[0][0]),
         dict,
     )
     assert isinstance(
-        parsers.result_parser(test_cases[1][1], test_cases[1][0]),
+        reader.result_parser(test_cases[1][1], test_cases[1][0]),
         dict,
     )
 

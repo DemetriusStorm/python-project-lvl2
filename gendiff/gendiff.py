@@ -75,7 +75,7 @@ def gen_state(state, node):
     return tree
 
 
-def gen_diff(main_data, changed_data):  # noqa: WPS210
+def generate_diff(main_data, changed_data):  # noqa: WPS210
     """
     Build diff.
 
@@ -97,7 +97,7 @@ def gen_diff(main_data, changed_data):  # noqa: WPS210
         if key in keys_state[UNCHANGED]:
             shared = changed_data[key]
             if isinstance(node, dict) and isinstance(shared, dict):
-                diff[key] = (NESTED, gen_diff(node, shared))
+                diff[key] = (NESTED, generate_diff(node, shared))
             elif node == shared:
                 diff[key] = (UNCHANGED, node)
             else:
