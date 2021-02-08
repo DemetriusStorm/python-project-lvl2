@@ -3,6 +3,7 @@
 from gendiff import parsers, formats
 from gendiff.gendiff import generate_diff
 
+
 PATH = './tests/fixtures'
 
 
@@ -21,7 +22,7 @@ def test_json():
         )
 
         diff = generate_diff(first_file, second_file)
-        assert formats.json(diff) == expected
+        assert formats.render_json(diff) == expected
 
 
 def test_plain():
@@ -39,7 +40,7 @@ def test_plain():
         )
 
         diff = generate_diff(first_file, second_file)
-        assert formats.plain(diff) == expected
+        assert formats.render_plain(diff) == expected
 
 
 def test_simple_plain():
@@ -57,7 +58,7 @@ def test_simple_plain():
         )
 
         diff = generate_diff(first_file, second_file)
-        assert formats.simple(diff) == expected
+        assert formats.render_simple(diff) == expected
 
         first_file = parsers.get_data(
             '{0}{1}'.format(PATH, '/data/first_file.json'),
@@ -67,7 +68,7 @@ def test_simple_plain():
         )
 
         diff = generate_diff(first_file, second_file)
-        assert formats.simple(diff) == expected
+        assert formats.render_simple(diff) == expected
 
 
 def test_tree():
@@ -85,4 +86,4 @@ def test_tree():
         )
 
         diff = generate_diff(first_file, second_file)
-        assert formats.simple(diff) == expected
+        assert formats.render_simple(diff) == expected

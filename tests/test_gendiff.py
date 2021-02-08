@@ -1,7 +1,6 @@
 """Test generate_diff."""
 
-from gendiff import parsers, formats
-from gendiff.gendiff import generate_diff
+from gendiff import gendiff, parsers, formats
 
 PATH = './tests/fixtures'
 
@@ -20,5 +19,5 @@ def test_generate_diff():
             '{0}{1}'.format(PATH, '/data/second_file.yaml'),
         )
 
-        diff = generate_diff(first_file, second_file)
-        assert formats.simple(diff) == expected
+        diff = gendiff.generate_diff(first_file, second_file)
+        assert formats.render_simple(diff) == expected

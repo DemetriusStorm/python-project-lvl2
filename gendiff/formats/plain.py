@@ -1,5 +1,10 @@
 """Formatter plain."""
-from gendiff import DELETED, ADDED, REPLACED, NESTED
+from gendiff import (
+    REPLACED,
+    ADDED,
+    DELETED,
+    NESTED,
+)
 
 
 def make_result(key, node_value, state, replaced_value=None):

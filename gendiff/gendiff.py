@@ -1,8 +1,5 @@
 """Gendiff."""
 
-import argparse
-
-from gendiff import formats
 from gendiff import (
     UNCHANGED,
     REPLACED,
@@ -10,34 +7,6 @@ from gendiff import (
     DELETED,
     NESTED,
 )
-
-parser = argparse.ArgumentParser(description='Generate diff')
-parser.add_argument(
-    'first_file',
-    type=str,
-    help='select first file to compare',
-)
-parser.add_argument(
-    'second_file',
-    type=str,
-    help='select second file to compare',
-)
-parser.add_argument(
-    '-f',
-    '--format',
-    type=str,
-    help='set format of output',
-)
-
-args = parser.parse_args()
-if args.format == formats.JSON:
-    format_diff = formats.json
-elif args.format == formats.PLAIN:
-    format_diff = formats.plain
-elif args.format is None:
-    format_diff = formats.simple
-else:
-    raise Exception('Format is not supported.')
 
 
 def gen_tree(nodes):
