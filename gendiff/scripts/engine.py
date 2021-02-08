@@ -1,9 +1,8 @@
 """Engine."""
 
 import argparse
-from gendiff import parsers, formats, gendiff
 
-# from gendiff.gendiff import args, format_diff, generate_diff
+from gendiff import parsers, formats, gendiff
 
 parser = argparse.ArgumentParser(description='Generate diff')
 parser.add_argument(
@@ -26,7 +25,6 @@ parser.add_argument(
 
 def main():
     """Generate result diff function."""
-
     args = parser.parse_args()
     if args.format == formats.JSON:
         format_diff = formats.render_json

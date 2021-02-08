@@ -3,7 +3,6 @@
 from gendiff import parsers, formats
 from gendiff.gendiff import generate_diff
 
-
 PATH = './tests/fixtures'
 
 
