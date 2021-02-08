@@ -1,5 +1,5 @@
 """Formatter plain."""
-from gendiff.gendiff import DELETED, ADDED, REPLACED, NESTED  # noqa: I001
+from gendiff.gendiff import DELETED, ADDED, REPLACED, NESTED
 
 
 def make_result(key, node_value, state, replaced_value=None):
@@ -83,5 +83,5 @@ def render_diff(diff, root_key=None):
                 is_complex,
                 status,
             ))
-    print(result_render)  # noqa: WPS421
+    print(result_render)
     return '\n'.join(result_render)

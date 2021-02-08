@@ -1,12 +1,12 @@
 """Formatter simple text."""
 
-from gendiff.gendiff import (  # noqa: I001
-    UNCHANGED,  # noqa: I001
-    DELETED,  # noqa: I001
-    ADDED,  # noqa: I001
-    REPLACED,  # noqa: I001
-    NESTED,  # noqa: I001
-)  # noqa: I001
+from gendiff.gendiff import (
+    UNCHANGED,
+    DELETED,
+    ADDED,
+    REPLACED,
+    NESTED,
+)
 
 render_sign = {
     UNCHANGED: None,
@@ -48,7 +48,7 @@ def make_result(key, node_value, space, sign=None):
     )
 
 
-def render_diff(diff, space=2):  # noqa: WPS231 WPS213
+def render_diff(diff, space=2):
     """
     Convert to text format.
 

@@ -2,7 +2,7 @@
 
 import argparse
 
-from gendiff import gendiff, parsers, formats  # noqa: I001
+from gendiff import gendiff, parsers, formats
 
 
 def main():
@@ -43,8 +43,7 @@ def main():
     second_file = parsers.get_data(args.second_file)
 
     diff = gendiff.gen_diff(first_file, second_file)
-    # TODO: fix func(print) noqa: WPS421
-    print(format_diff(diff))  # noqa: WPS421
+    print(format_diff(diff))
 
 
 if __name__ == '__main__':
