@@ -1,6 +1,6 @@
 """Formatter simple text."""
 
-from gendiff import (
+from gendiff.gendiff import (
     UNCHANGED,
     REPLACED,
     ADDED,

@@ -1,5 +1,5 @@
 """Formatter plain."""
-from gendiff import (
+from gendiff.gendiff import (
     REPLACED,
     ADDED,
     DELETED,

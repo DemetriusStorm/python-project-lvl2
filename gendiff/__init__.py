@@ -1,3 +1,5 @@
 """Namespace."""
-UNCHANGED, REPLACED, ADDED = 'unchanged', 'replaced', 'added'
-DELETED, NESTED = 'deleted', 'nested'
+
+from gendiff.gendiff import generate_diff
+
+__all__ = [generate_diff]  # noqa: WPS410

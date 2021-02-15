@@ -1,6 +1,7 @@
 """Engine."""
 
-from gendiff import parsers, formats, gendiff, reader_ext_source
+from gendiff import reader_ext_source, parsers, formats
+from gendiff.gendiff import generate_diff
 
 args = reader_ext_source.parser.parse_args()
 
@@ -18,7 +19,7 @@ def main():
     """Generate result diff function."""
     first_file = parsers.get_data(args.first_file)
     second_file = parsers.get_data(args.second_file)
-    print(format_diff(gendiff.generate_diff(first_file, second_file)))
+    print(format_diff(generate_diff(first_file, second_file)))
 
 
 if __name__ == '__main__':

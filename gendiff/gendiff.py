@@ -1,12 +1,7 @@
 """Gendiff."""
 
-from gendiff import (
-    UNCHANGED,
-    REPLACED,
-    ADDED,
-    DELETED,
-    NESTED,
-)
+UNCHANGED, REPLACED, ADDED = 'unchanged', 'replaced', 'added'
+DELETED, NESTED = 'deleted', 'nested'
 
 
 def gen_tree(nodes):
