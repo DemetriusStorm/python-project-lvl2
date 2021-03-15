@@ -1,92 +1,16 @@
 """Formatter plain."""
-from gendiff.gendiff import (
-    REPLACED,
-    ADDED,
-    DELETED,
-    NESTED,
-)
+
+from gendiff.formats.plain_flat import flat_diff, make_string
 
 
-def make_result(key, node_value, state, replaced_value=None):
+def format_diff(diff):
     """
-    Make text diff result.
+    Format diff results as a plain text.
 
     Parameters:
-        key: key
-        node_value: value
-        state: state diff
-        replaced_value: replaced_value
+        diff: List with the diff result rows.
 
     Returns:
-        return result diff
+        String of diff rows, formatted as a plain text.
     """
-    result_diff = ''
-
-    if node_value is True:
-        node_value = 'true'
-    elif node_value is False:
-        node_value = 'false'
-    elif isinstance(node_value, dict):
-        node_value = 'complex value'
-
-    if state == DELETED:
-        result_diff = "Property '{0}' removed".format(key)
-
-    elif state == ADDED:
-        result_diff = "Property '{0}' added with value: '{1}'".format(
-            key,
-            node_value,
-        )
-
-    elif state == REPLACED:
-        if isinstance(replaced_value, dict):
-            replaced_value = 'complex value'
-
-        result_diff = "Property '{0}' changed, from '{1}' to '{2}'".format(
-            key,
-            replaced_value,
-            node_value,
-        )
-
-    return '{0}'.format(result_diff)
-
-
-def render_diff(diff, root_key=None):
-    """
-    Render diff.
-
-    Parameters:
-        diff: diff
-        root_key: root_key
-
-    Returns:
-        return rendered diff.
-    """
-    result_render = []
-
-    for key, node_value in diff.items():
-        status = node_value[0]
-        is_complex = node_value[1]
-        tree_items = '{0}.{1}'.format(root_key, key) if root_key else key
-
-        if status == NESTED:
-            result_render.append(render_diff(is_complex, tree_items))
-
-        elif status == REPLACED:
-            difference = (node_value[1], node_value[2])
-            (new_value, old_value) = difference
-            result_render.append(make_result(
-                tree_items,
-                new_value,
-                REPLACED,
-                old_value,
-            ))
-
-        elif status in ADDED or status in DELETED:
-            result_render.append(make_result(
-                tree_items,
-                is_complex,
-                status,
-            ))
-    print(result_render)
-    return '\n'.join(result_render)
+    return make_string(flat_diff(diff))

@@ -1,88 +1,39 @@
 """Test formats."""
 
-from gendiff import parsers, formats
-from gendiff.gendiff import generate_diff
+import json
 
-PATH = './tests/fixtures'
+import pytest
+import subprocess
 
-
-def test_json():
-    """Test json."""
-    with open(
-            '{0}{1}'.format(PATH, '/expected/json_result'),
-            'r',
-    ) as source_data:
-        expected = source_data.read()
-        first_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/before.json'),
-        )
-        second_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/after.json'),
-        )
-
-        diff = generate_diff(first_file, second_file)
-        assert formats.render_json(diff) == expected
+json_file = 'tests/fixtures/json_result'
+plain_file = 'tests/fixtures/plain_result'
+stylish_file = 'tests/fixtures/stylish_result'
 
 
-def test_plain():
-    """Test plain."""
-    with open(
-            '{0}{1}'.format(PATH, '/expected/plain_result'),
-            'r',
-    ) as source_data:
-        expected = source_data.read()
-        first_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/before.json'),
-        )
-        second_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/after.json'),
-        )
+def _read_data(file_name):
+    with open(file_name, 'r') as source_file:
+        result_data = source_file.read()
 
-        diff = generate_diff(first_file, second_file)
-        assert formats.render_plain(diff) == expected
+    return '{0}\n'.format(result_data)
 
 
-def test_simple_plain():
-    """Test simple text."""
-    with open(
-            '{0}{1}'.format(PATH, '/expected/simple_result'),
-            'r',
-    ) as source_data:
-        expected = source_data.read()
-        first_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/first_file.yaml'),
-        )
-        second_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/second_file.yaml'),
-        )
+def _exec_app(file_path1, file_path2, file_format=None):
+    args = ['poetry', 'run', 'gendiff']
 
-        diff = generate_diff(first_file, second_file)
-        assert formats.render_simple(diff) == expected
+    if file_format is not None:
+        args.extend(['-f', file_format])
+    args.extend([file_path1, file_path2])
 
-        first_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/first_file.json'),
-        )
-        second_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/second_file.json'),
-        )
-
-        diff = generate_diff(first_file, second_file)
-        assert formats.render_simple(diff) == expected
+    return subprocess.check_output(args, universal_newlines=True)
 
 
-def test_tree():
-    """Test tree."""
-    with open(
-            '{0}{1}'.format(PATH, '/expected/complex_result.txt'),
-            'r',
-    ) as source_data:
-        expected = source_data.read()
-        first_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/before.json'),
-        )
-        second_file = parsers.get_data(
-            '{0}{1}'.format(PATH, '/data/after.json'),
-        )
+@pytest.mark.parametrize('file_format', ['json', 'yml'])
+def test_console(file_format):
+    file1 = 'tests/fixtures/first_file.{0}'.format(file_format)
+    file2 = 'tests/fixtures/second_file.{0}'.format(file_format)
+    source_data = _exec_app(file1, file2, 'json')
 
-        diff = generate_diff(first_file, second_file)
-        assert formats.render_simple(diff) == expected
+    assert _exec_app(file1, file2) == _read_data(stylish_file)
+    assert _exec_app(file1, file2, 'stylish') == _read_data(stylish_file)
+    assert _exec_app(file1, file2, 'plain') == _read_data(plain_file)
+    assert isinstance(json.loads(source_data), dict)

@@ -1,86 +1,24 @@
 """Gendiff."""
 
-UNCHANGED, REPLACED, ADDED = 'unchanged', 'replaced', 'added'
-DELETED, NESTED = 'deleted', 'nested'
+from gendiff.reader_ext_source import result_parser
+from gendiff.comparator import data_compare
+from gendiff.formats.formatter import DEFAULT, format_diff
 
 
-def gen_tree(nodes):
+def generate_diff(main_data, changed_data, file_format=DEFAULT):
     """
-    Build tree.
+    Generate diff for a given files.
 
     Parameters:
-        nodes: nodes
-
-    Returns:
-        return result tree
-    """
-    tree = {}
-    for key, _ in nodes.items():
-        if isinstance(nodes[key], dict):
-            tree[key] = (NESTED, gen_tree(nodes[key]))
-        else:
-            tree[key] = (UNCHANGED, nodes[key])
-
-    return tree
-
-
-def gen_state(state, node):
-    """
-    Check isinstance.
-
-    Parameters:
-        state: state data
-        node: node
-
-    Returns:
-        return result (state, data) of data
-    """
-    if isinstance(node, dict):
-        tree = state, gen_tree(node)
-    else:
-        tree = state, node
-
-    return tree
-
-
-def generate_diff(main_data, changed_data):  # noqa: WPS210
-    """
-    Build diff.
-
-    Parameters:
-        main_data: main_data
-        changed_data: changed_data
+        main_data: first file
+        changed_data: second file
+        file_format: output file format, default simple
 
     Returns:
         return diff
     """
-    diff = {}
-    keys_state = {
-        UNCHANGED: main_data.keys() & changed_data.keys(),
-        DELETED: main_data.keys() - changed_data.keys(),
-        ADDED: changed_data.keys() - main_data.keys(),
-    }
+    before_data = result_parser(main_data)
+    after_data = result_parser(changed_data)
+    diff = data_compare(before_data, after_data)
 
-    for key, node in main_data.items():
-        if key in keys_state[UNCHANGED]:
-            shared = changed_data[key]
-            if isinstance(node, dict) and isinstance(shared, dict):
-                diff[key] = (NESTED, generate_diff(node, shared))
-            elif node == shared:
-                diff[key] = (UNCHANGED, node)
-            else:
-                if isinstance(shared, dict) and not isinstance(node, dict):
-                    diff[key] = REPLACED, gen_tree(shared), node
-                elif not isinstance(shared, dict) and isinstance(node, dict):
-                    diff[key] = REPLACED, shared, gen_tree(node)
-                else:
-                    diff[key] = REPLACED, shared, node
-
-        elif key in keys_state[DELETED]:
-            diff[key] = gen_state(DELETED, node)
-
-    for key_after, value_after in changed_data.items():
-        if key_after in keys_state[ADDED]:
-            diff[key_after] = gen_state(ADDED, value_after)
-
-    return diff
+    return format_diff(diff, file_format)
