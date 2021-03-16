@@ -39,7 +39,7 @@ def main():
             file_format=output_format,
         )
     except ValueError as ex:
-        print('Something bad happened: {0}'.format(ex))
+        print('Something happened... {0}'.format(ex))
         sys.exit(1)
 
     print(diff)
