@@ -29,17 +29,5 @@ Stylish output, plain text output or json output
  
 ``gendiff --format=json first_file second_file``
 
-Comparing JSON files
-[![asciicast](https://asciinema.org/a/365554.svg)](https://asciinema.org/a/365554)
-
-Comparing YAML files
-[![asciicast](https://asciinema.org/a/365555.svg)](https://asciinema.org/a/365555)
-
-Comparing nested
-[![asciicast](https://asciinema.org/a/365557.svg)](https://asciinema.org/a/365557)
-
-Result in PLAIN
-[![asciicast](https://asciinema.org/a/365559.svg)](https://asciinema.org/a/365559)
-
-Result in JSON
-[![asciicast](https://asciinema.org/a/365560.svg)](https://asciinema.org/a/365560)
+This is ascinema demo video show you how to download, install and use package ‘gendiff’.
+[![asciicast](https://asciinema.org/a/399581.svg)](https://asciinema.org/a/399581)
