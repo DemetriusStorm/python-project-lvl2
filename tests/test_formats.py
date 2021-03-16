@@ -37,3 +37,12 @@ def test_console(file_format):
     assert _exec_app(file1, file2, 'stylish') == _read_data(stylish_file)
     assert _exec_app(file1, file2, 'plain') == _read_data(plain_file)
     assert isinstance(json.loads(source_data), dict)
+
+
+def test_source():
+    file1 = 'tests/fixtures/first_file.json'
+    file_err = 'tests/fixtures/first_file'
+    try:
+        _exec_app(file1, file_err, 'json')
+    except subprocess.CalledProcessError as err:
+        assert isinstance(err, Exception)
