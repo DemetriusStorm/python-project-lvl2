@@ -24,7 +24,7 @@ group3:
       number: 45
 
 group4:
-  default: ""
+  default: 0
   foo: null
   isNested: none
   key: false

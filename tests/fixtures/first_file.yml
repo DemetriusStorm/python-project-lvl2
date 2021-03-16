@@ -21,8 +21,8 @@ group2:
 group4:
   default: null
   foo: 0
-  isNested: false
+  isNested: null
   nest:
-    bar: ""
+    bar: 5
     isNested: true
   type: bas

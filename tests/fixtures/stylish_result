@@ -45,14 +45,14 @@
     }
     group4: {
       - default: null
-      + default:
+      + default: 0
       - foo: 0
       + foo: null
-      - isNested: false
+      - isNested: null
       + isNested: none
       + key: false
         nest: {
-          - bar:
+          - bar: 5
           + bar: 0
           - isNested: true
         }

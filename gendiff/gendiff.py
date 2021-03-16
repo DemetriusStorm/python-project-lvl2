@@ -12,7 +12,7 @@ def generate_diff(main_data, changed_data, file_format=DEFAULT):
     Parameters:
         main_data: first file
         changed_data: second file
-        file_format: output file format, default simple
+        file_format: output file format, default stylish
 
     Returns:
         return diff

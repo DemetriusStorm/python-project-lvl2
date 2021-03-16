@@ -136,7 +136,7 @@
         {
           "key": "isNested",
           "type": "changed",
-          "value1": false,
+          "value1": null,
           "value2": "none"
         },
         {
@@ -151,7 +151,7 @@
             {
               "key": "bar",
               "type": "changed",
-              "value1": "",
+              "value1": 5,
               "value2": 0
             },
             {
