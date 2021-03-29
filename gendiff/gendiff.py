@@ -17,8 +17,8 @@ def generate_diff(main_data, changed_data, file_format=DEFAULT):
     Returns:
         return diff
     """
-    before_data = result_parser(main_data)
-    after_data = result_parser(changed_data)
-    diff = data_compare(before_data, after_data)
+    first_data = result_parser(main_data)
+    second_data = result_parser(changed_data)
+    diff = data_compare(first_data, second_data)
 
     return format_diff(diff, file_format)
