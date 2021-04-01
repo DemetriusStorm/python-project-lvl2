@@ -1,18 +1,16 @@
 """Read data from external sources."""
-
 import json
 
 import yaml
-import os
-import sys
 
 
-def result_parser(source):
+def data_parser(parsing_data: str, format_data: str) -> dict:
     """
     Read files with a given file names and return list of files structure.
 
     Parameters:
-        source: The path to the file to read.
+        parsing_data: data source.
+        format_data: type of data, json or yml
 
     Raises:
         ValueError: if call to something fails.
@@ -20,17 +18,9 @@ def result_parser(source):
     Returns:
         File content, parsed to the dictionary.
     """
-    _, file_ext = os.path.splitext(source)
-    file_ext = file_ext.lower()
+    if format_data == 'json':
+        return json.loads(parsing_data)
+    elif format_data in ('yml', 'yaml'):  # noqa: WPS510
+        return yaml.safe_load(parsing_data)
 
-    try:
-        with open(source, 'r') as source_data:
-            if file_ext == '.json':
-                return json.load(source_data)
-            elif file_ext in ('.yml', '.yaml'):  # noqa: WPS510
-                return yaml.safe_load(source_data)
-            raise ValueError('Unknown file format: {0}'.format(file_ext))
-
-    except FileNotFoundError as err:
-        print('{0}'.format(err))
-        sys.exit(1)
+    raise ValueError('Unknown file format: {0}'.format(format_data))

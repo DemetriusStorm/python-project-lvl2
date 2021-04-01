@@ -1,24 +1,52 @@
 """Gendiff."""
 
-from gendiff.reader_ext_source import result_parser
-from gendiff.comparator import data_compare
+import os
+
+from gendiff.reader_ext_source import data_parser
+from gendiff.comparator import build_diff
 from gendiff.formats.formatter import DEFAULT, format_diff
 
 
-def generate_diff(main_data, changed_data, file_format=DEFAULT):
+def _read_data_from_file(path_to_file: str) -> str:
+    try:
+        with open(path_to_file, 'r') as out:
+            return out.read()
+    except OSError as err:
+        print('File not found: {0}'.format(err))
+
+
+def _fetch_data_type(source: str) -> str:
+    _, extension = os.path.splitext(source)
+    extension = extension.lower()
+
+    if extension == '.json':
+        return 'json'
+    elif extension in ('.yml', '.yaml'):  # noqa: WPS510
+        return 'yml'
+    raise ValueError('Unknown file format: {0}'.format(extension))
+
+
+def generate_diff(data1: str, data2: str, data_format=DEFAULT) -> str:
     """
     Generate diff for a given files.
 
     Parameters:
-        main_data: first file
-        changed_data: second file
-        file_format: output file format, default stylish
+        data1: first data
+        data2: second data
+        data_format: output data format, default stylish
 
     Returns:
         return diff
     """
-    first_data = result_parser(main_data)
-    second_data = result_parser(changed_data)
-    diff = data_compare(first_data, second_data)
+    first_data = data_parser(
+        _read_data_from_file(data1),
+        _fetch_data_type(data1),
+    )
+    second_data = data_parser(
+        _read_data_from_file(data2),
+        _fetch_data_type(data2),
+    )
 
-    return format_diff(diff, file_format)
+    diff = build_diff(first_data, second_data)
+
+    return format_diff(diff, data_format)
