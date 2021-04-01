@@ -23,7 +23,7 @@ def main():
     parser.add_argument(
         '-f',
         '--format',
-        choices=FORMATS.keys(),
+        choices=FORMATS,
         default=DEFAULT,
         type=str,
         help='set format of output',
@@ -36,11 +36,10 @@ def main():
         diff = generate_diff(
             args.first_file,
             args.second_file,
-            file_format=output_format,
+            data_format=output_format,
         )
     except ValueError as ex:
-        print('Something happened... {0}'.format(ex))
-        sys.exit(1)
+        raise ValueError('Something happened... {0}'.format(ex))
 
     print(diff)
 

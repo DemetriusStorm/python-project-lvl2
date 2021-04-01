@@ -1,15 +1,10 @@
 """Formatters."""
-import types
 
 from gendiff.formats import json, plain, stylish
 
 DEFAULT = 'stylish'
 
-FORMATS = types.MappingProxyType({
-    'stylish': stylish,
-    'plain': plain,
-    'json': json,
-})
+FORMATS = ('stylish', 'plain', 'json')
 
 
 def format_diff(diff, style=DEFAULT):
@@ -17,7 +12,7 @@ def format_diff(diff, style=DEFAULT):
     Format the diff output with a given format style.
 
     Parameters:
-        diff: A files file structures compare result.
+        diff: A files structures compare result.
         style: A formatter name to format a diff.
 
     Returns:
@@ -26,7 +21,14 @@ def format_diff(diff, style=DEFAULT):
     Raises:
         ValueError: When the unknown format key is given.
     """
-    if style in FORMATS.keys():
-        return FORMATS.get(style).format_diff(diff)
+    if style in FORMATS:
+        if style == 'plain':
+            return plain.format_diff(diff)
+
+        elif style == 'stylish':
+            return stylish.format_diff(diff)
+
+        elif style == 'json':
+            return json.format_diff(diff)
 
     raise ValueError('Unknown diff output format!')

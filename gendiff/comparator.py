@@ -12,92 +12,74 @@ def data_compare(dict1, dict2):
     Returns:
         Diff of the given dictionaries.
     """
-    collected_keys = _collect_keys(dict1, dict2)
-
+    all_keys = list(dict1.keys() | dict2.keys())
     diff = []
 
-    for key in collected_keys['all_keys']:
-        diff_value1 = dict1.get(key, {})
-        diff_value2 = dict2.get(key, {})
-        if key in collected_keys['removed_keys']:
+    for key in sorted(all_keys):
+        if key not in dict1:
             diff.append(
-                _gen_diff_row(
-                    key,
-                    data_compare(diff_value1, diff_value1) if isinstance(
-                        diff_value1, dict,
-                    ) else diff_value1,
-                    'removed',
-                ),
+                {
+                    'type': 'added',
+                    'key': key,
+                    'value': dict2[key],
+                },
             )
-        elif key in collected_keys['added_keys']:
+            continue
+
+        if key not in dict2:
             diff.append(
-                _gen_diff_row(
-                    key,
-                    data_compare(diff_value2, diff_value2) if isinstance(
-                        diff_value2, dict,
-                    ) else diff_value2,
-                    'added',
-                ),
+                {
+                    'type': 'removed',
+                    'key': key,
+                    'value': dict1[key],
+                },
             )
-        elif diff_value1 == diff_value2:
+            continue
+
+        if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
             diff.append(
-                _gen_diff_row(
-                    key,
-                    data_compare(diff_value1, diff_value2) if isinstance(
-                        diff_value1, dict,
-                    ) else diff_value1,
-                    'unmodified',
-                ),
+                {
+                    'type': 'nested',
+                    'key': key,
+                    'children': data_compare(dict1[key], dict2[key]),
+                },
             )
-        elif isinstance(diff_value1, dict) and isinstance(diff_value2, dict):
+            continue
+
+        if dict1[key] != dict2[key]:
             diff.append(
-                _gen_diff_row(
-                    key,
-                    data_compare(diff_value1, diff_value2),
-                    'unmodified',
-                ),
+                {
+                    'type': 'updated',
+                    'key': key,
+                    'old_value': dict1[key],
+                    'new_value': dict2[key],
+                },
             )
-        else:
-            diff.append(
-                _gen_diff_row(
-                    key,
-                    _gen_nested_diff(dict1, dict2, key),
-                    'updated',
-                ),
-            )
+            continue
+
+        diff.append(
+            {
+                'type': 'unchanged',
+                'key': key,
+                'value': dict1[key],
+            },
+        )
 
     return diff
 
 
-def _gen_diff_row(diff_key, diff_value, diff_state):
+def build_diff(first_object: dict, second_object: dict) -> dict:
+    """
+    The function compares two objects.
+
+    Args:
+        first_object: first object.
+        second_object: second object.
+
+    Returns:
+        Dictionary with the result of comparison.
+    """
     return {
-        'key': diff_key,
-        'value': diff_value,
-        'state': diff_state,
-    }
-
-
-def _gen_nested_diff(dict1, dict2, key):
-    diff_value1 = dict1[key]
-    diff_value2 = dict2[key]
-
-    return {
-        'old': data_compare(diff_value1, diff_value1)
-        if isinstance(diff_value1, dict) else diff_value1,
-        'new': data_compare(diff_value2, diff_value2)
-        if isinstance(diff_value2, dict) else diff_value2,
-    }
-
-
-def _collect_keys(dict1, dict2):
-    if dict1.keys() == dict2.keys():
-        all_keys = dict1.keys()
-    else:
-        all_keys = list(dict1.keys() | dict2.keys())
-        all_keys.sort()
-
-    return {
-        'all_keys': all_keys,
-        'removed_keys': dict1.keys() - dict2.keys(),
-        'added_keys': dict2.keys() - dict1.keys(),
+        'type': 'origin',
+        'children': data_compare(first_object, second_object),
     }
