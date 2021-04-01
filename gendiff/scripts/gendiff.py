@@ -1,7 +1,6 @@
 """Engine."""
 
 import argparse
-import sys
 
 from gendiff import generate_diff
 from gendiff.formats.formatter import FORMATS, DEFAULT
