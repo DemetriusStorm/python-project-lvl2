@@ -95,24 +95,24 @@ def format_diff(node, depth=0):  # noqa: WPS212
     raise ValueError('The specified node type is not detected')
 
 
-def _walk_string(node, tree_depth):
-    if node is None:
+def _walk_string(some_value, tree_depth):
+    if some_value is None:
         return 'null'
 
-    if isinstance(node, bool):
-        return str(node).lower()
+    if isinstance(some_value, bool):
+        return str(some_value).lower()
 
-    elif isinstance(node, dict):
+    elif isinstance(some_value, dict):
         result_string = []
-        for key, node_value in node.items():
+        for key, value in some_value.items():  # noqa: WPS110
             result_string.append('{0}    {1}: {2}\n'.format(
                 calculate_indent(tree_depth + 1),
                 key,
-                _walk_string(node_value, tree_depth + 1),
+                _walk_string(value, tree_depth + 1),
             ))
 
         return '{{\n{0}{1}}}'.format(
             ''.join(result_string),
             calculate_indent(tree_depth + 1),
         )
-    return node
+    return some_value
