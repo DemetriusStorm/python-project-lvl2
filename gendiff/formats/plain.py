@@ -10,6 +10,7 @@ def _format_value(row_value):
         return "'{0}'".format(row_value)
     elif isinstance(row_value, bool):
         return str(row_value).lower()
+    return row_value
 
 
 def _flat_list(node_items):
