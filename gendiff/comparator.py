@@ -24,9 +24,8 @@ def data_compare(dict1, dict2):
                     'value': dict2[key],
                 },
             )
-            continue
 
-        if key not in dict2:
+        elif key not in dict2:
             diff.append(
                 {
                     'type': 'removed',
@@ -34,9 +33,8 @@ def data_compare(dict1, dict2):
                     'value': dict1[key],
                 },
             )
-            continue
 
-        if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
+        elif isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
             diff.append(
                 {
                     'type': 'nested',
@@ -44,9 +42,8 @@ def data_compare(dict1, dict2):
                     'children': data_compare(dict1[key], dict2[key]),
                 },
             )
-            continue
 
-        if dict1[key] != dict2[key]:
+        elif dict1[key] != dict2[key]:  # noqa: WPS504
             diff.append(
                 {
                     'type': 'updated',
@@ -55,15 +52,15 @@ def data_compare(dict1, dict2):
                     'new_value': dict2[key],
                 },
             )
-            continue
 
-        diff.append(
-            {
-                'type': 'unchanged',
-                'key': key,
-                'value': dict1[key],
-            },
-        )
+        else:
+            diff.append(
+                {
+                    'type': 'unchanged',
+                    'key': key,
+                    'value': dict1[key],
+                },
+            )
 
     return diff
 
