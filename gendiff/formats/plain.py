@@ -2,7 +2,7 @@
 
 
 def _format_value(row_value):
-    if isinstance(row_value, dict):
+    if isinstance(row_value, (dict, list)):
         return '[complex value]'
     elif row_value is None:
         return 'null'
