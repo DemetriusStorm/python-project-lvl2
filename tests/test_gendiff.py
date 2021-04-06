@@ -25,7 +25,9 @@ def test_gen_diff(file_format):
     json_diff = generate_diff(file1, file2, 'json')
     stylish_diff = generate_diff(file1, file2, 'stylish')
     plain_diff = generate_diff(file1, file2, 'plain')
+    default_diff = generate_diff(file1, file2)
 
+    assert default_diff == _read_data(stylish_result)
     assert stylish_diff == _read_data(stylish_result)
     assert plain_diff == _read_data(plain_result)
     assert json.loads(json_diff) == json.loads(_read_data(json_result))
