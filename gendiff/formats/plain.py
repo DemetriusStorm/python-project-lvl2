@@ -8,8 +8,8 @@ def _format_value(row_value):
         return 'null'
     elif isinstance(row_value, str):
         return "'{0}'".format(row_value)
-
-    return str(row_value).lower()
+    elif isinstance(row_value, bool):
+        return str(row_value).lower()
 
 
 def _flat_list(node_items):
