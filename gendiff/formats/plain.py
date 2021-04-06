@@ -12,12 +12,12 @@ def _format_value(row_value):
         return str(row_value).lower()
 
 
-def _flat_list(node_items=()):
+def _flat_list(node_items):
     flatten_rows = []
+    if not isinstance(node_items, list):
+        return [node_items]
 
     for node_value in node_items:
-        if not isinstance(node_items, list):
-            return [node_items]
         flatten_rows.extend(_flat_list(node_value))
 
     return flatten_rows
