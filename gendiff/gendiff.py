@@ -23,7 +23,7 @@ def _fetch_data_type(source: str) -> str:
         return 'json'
     elif extension in ('.yml', '.yaml'):  # noqa: WPS510
         return 'yml'
-    raise ValueError('Unknown file format: {0}'.format(extension))
+    return 'unknown'
 
 
 def generate_diff(data1: str, data2: str, data_format=DEFAULT) -> str:
